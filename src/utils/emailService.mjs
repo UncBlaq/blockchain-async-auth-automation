@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { createUrlSafeToken, createResetToken } from "./jwt.mjs";
+import { createResetToken } from "./jwt.mjs";
 
 dotenv.config();
 
@@ -82,7 +82,7 @@ export const sendVerificationEmail = async (email, userId) => {
 export const sendPasswordResetEmail = async (email, userId) => {
   const frontendURL = process.env.FRONTEND_URL || "http://localhost:3000";
   const token = createResetToken({ email });
-  const resetLink = `${frontendURL}/reset-password/${userId}/${token}`;
+  const resetLink = `${frontendURL}/reset-password/${token}`;
 
   const emailBody = `
     <h3>Password Reset Request</h3>

@@ -11,30 +11,6 @@ export const createAccessToken = (data) => {
     return jwt.sign(data, SECRET_KEY, { algorithm: ALGORITHM });
 };
 
-
-/**
- * Generates a URL-safe token.
- * @param {Object} data - Payload to encode in the token.
- * @returns {string} - The generated token.
- */
-export const createUrlSafeToken = (data) => {
-  return jwt.sign(data, SECRET_KEY, { expiresIn: TOKEN_EXPIRATION });
-};
-
-/**
- * Verifies a URL-safe token.
- * @param {string} token - The token to verify.
- * @returns {Object} - Decoded payload if valid.
- * @throws {Error} - Throws error if token is invalid or expired.
- */
-export const verifyUrlSafeToken = (token) => {
-  try {
-    return jwt.verify(token, SECRET_KEY);
-  } catch (error) {
-    throw new Error("Invalid or expired token");
-  }
-};
-
 const RESET_TOKEN_EXPIRATION = "15m"; // 15 minutes expiration
 
 /**

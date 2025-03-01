@@ -15,6 +15,14 @@ const loggingMiddleware = (request, res, next) => {
 
 // app.use(loggingMiddleware);
 
+// Middleware to catch invalid JSON syntax
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      return res.status(400).json({ error: "Invalid JSON format" });
+    }
+    next();
+  });
+
 app.get('/', (req, res, ) => {
     res.send('Hello, Aye!');
 });

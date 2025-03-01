@@ -1,16 +1,25 @@
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 import { verifyResetToken } from "./jwt.mjs";
 import { sendPasswordResetEmail } from "./emailService.mjs";
+import { emailSchema } from "../schemas/users.mjs";
 
-/**
- * Initiate password reset (send email with token)
- */
+
 export const requestPasswordReset = async (req, res) => {
-  const { email } = req.body;
+  const parsed = emailSchema.safeParse(req.body);
+  
+  if (!parsed.success) {
+    return res.status(400).json({ errors: parsed.error.errors });
+  }
+  const { data: { email } } = parsed;
+
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { 
+      email 
+    } });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     await sendPasswordResetEmail(user.email, user.id);
@@ -20,15 +29,16 @@ export const requestPasswordReset = async (req, res) => {
   }
 };
 
-/**
- * Handle resetting the password
- */
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
+  console.log(token)
 
   try {
+    console.log('Here!!')
     const decoded = verifyResetToken(token);
+    console.log('got her')
+    return
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await prisma.user.update({

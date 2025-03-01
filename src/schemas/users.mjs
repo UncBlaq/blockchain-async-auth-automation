@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const createUserValidationSchema = {
     email : {
         isLength : {
@@ -16,7 +18,6 @@ export const createUserValidationSchema = {
     }
 } 
 
-
 export const loginUserValidationSchema = {
     email : {
         isLength : {
@@ -34,3 +35,14 @@ export const loginUserValidationSchema = {
         notEmpty : true
     }
 }
+
+// Define a Zod schema for filtering response data
+export const UserResponseSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  isVerified: z.boolean()
+});
+
+export const emailSchema = z.object({
+    email: z.string().email("Invalid email format").trim().toLowerCase(),
+  }).strict();
