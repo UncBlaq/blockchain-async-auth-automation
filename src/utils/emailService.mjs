@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { createResetToken } from "./jwt.mjs";
+import { redisClient, connectRedis } from "../index.mjs";
+import { randomUUID } from "crypto";
 
 dotenv.config();
 
@@ -79,9 +80,14 @@ export const sendVerificationEmail = async (email, userId) => {
  * @param {string} email - The user's email.
  * @param {string} userId - The user's ID.
  */
+
 export const sendPasswordResetEmail = async (email, userId) => {
+  await connectRedis();
   const frontendURL = process.env.FRONTEND_URL || "http://localhost:3000";
-  const token = createResetToken({ email });
+  const token = randomUUID();
+  console.log(token);
+  
+  await redisClient.setEx(token, 600, email);
   const resetLink = `${frontendURL}/reset-password/${token}`;
 
   const emailBody = `

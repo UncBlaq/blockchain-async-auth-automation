@@ -20,6 +20,8 @@ model User {
   role      Role @default(BASIC)
   password  String 
   isVerified Boolean @default(false)
+  address   String?
+  nonce   Int?
 }
 
 enum Role {

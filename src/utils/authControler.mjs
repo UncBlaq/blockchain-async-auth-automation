@@ -2,11 +2,17 @@ import speakeasy from "speakeasy";
 import QRCode from "qrcode";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
-import { verifyResetToken } from "./jwt.mjs";
+
 import { sendPasswordResetEmail } from "./emailService.mjs";
 import { emailSchema } from "../schemas/users.mjs";
+import { hashPassword } from "./hash.mjs";
+import { redisClient } from "../index.mjs";
 
+const prisma = new PrismaClient();
+
+
+
+// const redisClient = createClient();
 
 export const requestPasswordReset = async (req, res) => {
   const parsed = emailSchema.safeParse(req.body);
@@ -29,17 +35,22 @@ export const requestPasswordReset = async (req, res) => {
   }
 };
 
+
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
   console.log(token)
 
   try {
-    console.log('Here!!')
-    const decoded = verifyResetToken(token);
-    console.log('got her')
-    return
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const storedToken = await redisClient.get(`reset:${token}`);
+    console.log('got here1')
+    if (!storedToken || storedToken !== receivedToken) {
+      console.log('got here2')
+      throw new Error("Invalid or expired token");
+    }
+    console.log('got here3')
+    await redisClient.del(`reset:${token}`);
+    const hashedPassword = await hashPassword(password);
 
     await prisma.user.update({
       where: { email: decoded.email },

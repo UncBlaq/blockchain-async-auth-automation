@@ -1,12 +1,23 @@
 import express from 'express';
 import userRouter from './routes/users.mjs';
 import { setupSwagger } from './swagger.mjs';
+import { createClient } from "redis";
+
 
 const app = express();
 app.use(express.json());
 app.use(userRouter);
 
 setupSwagger(app); // Enable Swagger UI
+const redisClient = createClient();
+
+redisClient.on("error", (err) => console.error("Redis error:", err));
+
+const connectRedis = async () => {
+  if (!redisClient.isOpen) {
+    await redisClient.connect();
+  }
+};
 
 const loggingMiddleware = (request, res, next) => {
     console.log(`Request received at ${new Date().toISOString()} with method ${request.method} and path ${request.path}`);
@@ -26,6 +37,11 @@ app.use((err, req, res, next) => {
 app.get('/', (req, res, ) => {
     res.send('Hello, Aye!');
 });
+
+
+
+export { redisClient, connectRedis };
+
 
 
 app.listen(

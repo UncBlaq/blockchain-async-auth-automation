@@ -10,6 +10,7 @@ import { authenticateUser } from "../utils/jwt.mjs";
 import { checkErrors } from "../utils/users.mjs";
 import { createUser, loginUser } from "../handlers/userControler.mjs";
 
+
 const userRouter = Router();
 
 /**
@@ -71,18 +72,12 @@ userRouter.post(
   loginUser
 )
 
-// TODO: Add forgot password endpoint and change password endpoint
 
 userRouter.post("/forgot-password", 
   checkErrors,
   requestPasswordReset);
   
 userRouter.post("/reset-password/:token", 
-  // async () => {
-  //   console.log("Got here");
-  //   return
-  // },
-  
   resetPassword
 );
 

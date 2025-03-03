@@ -1,40 +1,18 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import crypto from "crypto";
 
 dotenv.config();
 
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 const TOKEN_EXPIRATION = process.env.JWT_EXPIRATION || "1h"; // Set token expiry
 const ALGORITHM = process.env.ALGORITHM 
+const SALT = process.env.SALT
 
 export const createAccessToken = (data) => {
     return jwt.sign(data, SECRET_KEY, { algorithm: ALGORITHM });
 };
 
-const RESET_TOKEN_EXPIRATION = "15m"; // 15 minutes expiration
-
-/**
- * Generates a password reset token
- * @param {Object} data - Payload to encode in the token.
- * @returns {string} - The generated token.
- */
-export const createResetToken = (data) => {
-  return jwt.sign(data, SECRET_KEY, { expiresIn: RESET_TOKEN_EXPIRATION });
-};
-
-/**
- * Verifies a password reset token.
- * @param {string} token - The token to verify.
- * @returns {Object} - Decoded payload if valid.
- * @throws {Error} - Throws error if token is invalid or expired.
- */
-export const verifyResetToken = (token) => {
-  try {
-    return jwt.verify(token, SECRET_KEY);
-  } catch (error) {
-    throw new Error("Invalid or expired token");
-  }
-};
 
 /**
  * Middleware to authenticate users using JWT
