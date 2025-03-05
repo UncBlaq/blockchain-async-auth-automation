@@ -7,6 +7,7 @@ import { sendPasswordResetEmail } from "./emailService.mjs";
 import { emailSchema } from "../schemas/users.mjs";
 import { hashPassword } from "./hash.mjs";
 import { redisClient } from "../index.mjs";
+import { checkAttempts } from "./users.mjs";
 
 const prisma = new PrismaClient();
 
@@ -27,6 +28,7 @@ export const requestPasswordReset = async (req, res) => {
       email 
     } });
     if (!user) return res.status(404).json({ message: "User not found" });
+    await checkAttempts(user.email);
 
     await sendPasswordResetEmail(user.email, user.id);
     res.json({ message: "Password reset email sent!" });
@@ -39,27 +41,25 @@ export const requestPasswordReset = async (req, res) => {
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-  console.log(token)
 
   try {
-    const storedToken = await redisClient.get(`reset:${token}`);
-    console.log('got here1')
-    if (!storedToken || storedToken !== receivedToken) {
-      console.log('got here2')
+    const storedToken = await redisClient.get(token)
+    const email = storedToken
+    console.log("Checking token existence:", storedToken);
+    if (!storedToken) {
       throw new Error("Invalid or expired token");
     }
-    console.log('got here3')
-    await redisClient.del(`reset:${token}`);
-    const hashedPassword = await hashPassword(password);
+    await redisClient.del(token);
+    const hashedPassword = hashPassword(password);
 
     await prisma.user.update({
-      where: { email: decoded.email },
+      where: { email: email },
       data: { password: hashedPassword },
     });
 
     res.json({ message: "Password reset successfully!" });
   } catch (error) {
-    res.status(400).json({ message: "Invalid or expired token" });
+    res.status(400).json({ message: "Invalid or expired token", error: error });
   }
 };
 
