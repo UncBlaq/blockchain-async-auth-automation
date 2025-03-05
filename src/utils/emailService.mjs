@@ -87,7 +87,7 @@ export const sendPasswordResetEmail = async (email, userId) => {
   const token = randomUUID();
   console.log(token);
   
-  await redisClient.setEx(token, 600, email);
+  await redisClient.setEx(token, 900, email);
   const resetLink = `${frontendURL}/reset-password/${token}`;
 
   const emailBody = `

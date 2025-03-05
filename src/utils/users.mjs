@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { validationResult } from "express-validator";
-import { redisClient, connectRedis } from "../index.mjs";
+import { redisClient, connectRedis, prisma} from "../index.mjs";
 
-const prisma = new PrismaClient();
 
 export const checkExistingEmail = async (req, res, next) => {
   try {

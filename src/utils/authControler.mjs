@@ -1,19 +1,12 @@
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
-import { PrismaClient } from "@prisma/client";
-
 
 import { sendPasswordResetEmail } from "./emailService.mjs";
 import { emailSchema } from "../schemas/users.mjs";
 import { hashPassword } from "./hash.mjs";
-import { redisClient } from "../index.mjs";
+import { redisClient, prisma} from "../index.mjs";
 import { checkAttempts } from "./users.mjs";
 
-const prisma = new PrismaClient();
-
-
-
-// const redisClient = createClient();
 
 export const requestPasswordReset = async (req, res) => {
   const parsed = emailSchema.safeParse(req.body);

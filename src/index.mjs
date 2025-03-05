@@ -2,12 +2,15 @@ import express from 'express';
 import userRouter from './routes/users.mjs';
 import { setupSwagger } from './swagger.mjs';
 import { createClient } from "redis";
+import { PrismaClient } from "@prisma/client";
 
 
 const app = express();
 app.use(express.json());
 app.use(userRouter);
 
+
+const prisma = new PrismaClient();
 setupSwagger(app); // Enable Swagger UI
 const redisClient = createClient();
 
@@ -40,7 +43,7 @@ app.get('/', (req, res, ) => {
 
 
 
-export { redisClient, connectRedis };
+export { redisClient, connectRedis, prisma };
 
 
 
