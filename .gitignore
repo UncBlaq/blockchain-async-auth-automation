@@ -19,6 +19,7 @@ Here is another one
 # next.js
 /.next/
 /out/
+.emit.log
 
 # production
 /build
