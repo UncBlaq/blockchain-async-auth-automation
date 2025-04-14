@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:e2e": "dotenv -e .env.test -- jest",
     "test-coverage": "jest --coverage",
     "dev": "nodemon src/server.mjs"
   },
@@ -23,6 +22,8 @@
     "supertest": "^7.1.0"
   },
   "dependencies": {
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0",
     "@logtail/node": "^0.5.2",
     "@logtail/winston": "^0.5.2",
     "@prisma/client": "^6.4.1",
