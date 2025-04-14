@@ -19,7 +19,9 @@ Here is another one
 # next.js
 /.next/
 /out/
-.emit.log
+emit.log
+dump.rdb
+package.json
 
 # production
 /build
