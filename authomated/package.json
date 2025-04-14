@@ -1,0 +1,48 @@
+{
+  "name": "blockchain_express",
+  "version": "1.0.0",
+  "description": "oracle_p_App",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test-coverage": "jest --coverage",
+    "dev": "nodemon src/server.mjs"
+  },
+  "author": "JM ADERETI",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.9",
+    "@types/jest": "^29.5.14",
+    "express": "^4.21.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.4.1",
+    "supertest": "^7.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0",
+    "@logtail/node": "^0.5.2",
+    "@logtail/winston": "^0.5.2",
+    "@prisma/client": "^6.4.1",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.0",
+    "passport": "^0.7.0",
+    "passport-discord": "^0.1.4",
+    "qrcode": "^1.5.4",
+    "rate-limiter-flexible": "^5.0.5",
+    "redis": "^4.7.0",
+    "speakeasy": "^2.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "type": "module"
+}
